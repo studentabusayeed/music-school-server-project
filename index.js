@@ -28,17 +28,26 @@ async function run() {
         await client.connect();
 
         const musicCollection = client.db("musicSc").collection("menu");
+        const cartCollection = client.db("musicSc").collection("cart");
 
 
         // menu related apis
         app.get('/menu', async (req, res) => {
             const query = {};
             const options = {
-                sort: {'student': -1}
+                sort: { 'student': -1 }
             }
             const result = await musicCollection.find(query, options).toArray();
             res.send(result);
         });
+
+        // cart related apis
+        app.post('/carts', async (req, res) => {
+            const item = req.body;
+            console.log(item);
+            const result = await cartCollection.insertOne(item);
+            res.send(result);
+        })
 
 
 

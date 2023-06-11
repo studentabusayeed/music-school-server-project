@@ -203,6 +203,12 @@ async function run() {
             })
         });
 
+        app.get('/payment', async (req, res) => {
+            const query = {};
+            const result = await paymentCollection.find(query).toArray();
+            res.send(result);
+        });
+
 
 
 

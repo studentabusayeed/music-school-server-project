@@ -120,7 +120,7 @@ async function run() {
 
 
 
-        // menu related apis
+        // menu related api
         app.get('/menu', async (req, res) => {
             const query = {};
             const options = {
@@ -130,7 +130,7 @@ async function run() {
             res.send(result);
         });
 
-        // cart related apis
+        // cart related api
         app.get('/carts', verifyJWT, async (req, res) => {
             const email = req.query.email;
             if (!email) {

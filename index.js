@@ -50,6 +50,7 @@ async function run() {
         const userCollection = client.db("musicSc").collection("users");
         const paymentCollection = client.db("musicSc").collection("payments");
 
+        // JWT
         app.post('/jwt', (req, res) => {
             const user = req.body;
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
@@ -96,7 +97,33 @@ async function run() {
             const user = await userCollection.findOne(query);
             const result = { admin: user?.role === 'admin' }
             res.send(result);
-        })
+        });
+
+        app.get('/users/instructor/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+
+            if (req.decoded.email !== email) {
+                res.send({ instructor: false });
+            }
+
+            const query = { email: email }
+            const user = await userCollection.findOne(query);
+            const result = { instructor: user?.role === 'instructor' }
+            res.send(result);
+        });
+
+        app.get('/users/student/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+
+            if (req.decoded.email !== email) {
+                res.send({ student: false });
+            }
+
+            const query = { email: email }
+            const user = await userCollection.findOne(query);
+            const result = { student: user?.role === '' }
+            res.send(result);
+        });
 
         app.patch('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
@@ -129,6 +156,13 @@ async function run() {
             const result = await musicCollection.find(query, options).toArray();
             res.send(result);
         });
+
+        app.post('/menu', verifyJWT, async (req, res) => {
+            const newItem = req.body;
+            const result = await musicCollection.insertOne(newItem);
+            res.send(result);
+        });
+
 
         // cart related api
         app.get('/carts', verifyJWT, async (req, res) => {

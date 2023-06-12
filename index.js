@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 require('dotenv').config()
+const jwt = require('jsonwebtoken');
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY)
 const port = process.env.PORT || 5000;
 
@@ -85,6 +85,8 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         });
+
+        // users admin
 
         app.get('/users/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;

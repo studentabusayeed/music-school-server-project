@@ -86,7 +86,7 @@ async function run() {
             res.send(result);
         });
 
-        // users admin
+        // users admin api
 
         app.get('/users/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
@@ -182,7 +182,7 @@ async function run() {
             res.send(result);
         });
 
-        // Payment intent
+        // Payment intent apis
 
         app.post('/create-payment-intent', verifyJWT, async (req, res) => {
             const { price } = req.body;
